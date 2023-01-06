@@ -34,6 +34,8 @@ const HouseContextProvider = ({ children }) => {
   }, []);
 
   const handleClick = () => {
+    setLoading(true);
+
     const isDefault = (str) => {
       return str.split(' ').includes('(any)');
     };
@@ -42,9 +44,55 @@ const HouseContextProvider = ({ children }) => {
     const maxPrice = parseInt(price.split(' ')[2]);
 
     const newHouses = housesData.filter((house) => {
-      console.log(parseInt(house.price));
-      return newHouses;
+      const housePrice = parseInt(house.price);
+
+      if (
+        house.country === country &&
+        house.type === property &&
+        housePrice >= minPrice &&
+        housePrice <= maxPrice
+      ) {
+        return house;
+      }
+
+      if (isDefault(country) && isDefault(property) && isDefault(price)) {
+        return house;
+      }
+
+      if (!isDefault(country) && isDefault(property) && isDefault(price)) {
+        return house.country === country;
+      }
+
+      if (!isDefault(property) && !isDefault(country) && isDefault(price)) {
+        return house.type === property;
+      }
+      if (!isDefault(price) && isDefault(country) && isDefault(property)) {
+        if (housePrice >= minPrice && housePrice <= maxPrice) {
+          return house;
+        }
+      }
+      if (!isDefault(country) && !isDefault(property) && isDefault(price)) {
+        return house.country === country && house.type === property;
+      }
+
+      if (!isDefault(country) && isDefault(property) && !isDefault(price)) {
+        if ((housePrice >= minPrice) & (housePrice <= maxPrice)) {
+          return house.country === country;
+        }
+      }
+      if (!isDefault(country) && !isDefault(property) && !isDefault(price)) {
+        if (housePrice >= minPrice && housePrice <= maxPrice) {
+          return house.type === property;
+        }
+      }
     });
+
+    setTimeout(() => {
+      return (
+        newHouses.length < 1 ? setHouses([]) : setHouses(newHouses),
+        setLoading(false)
+      );
+    }, 1000);
   };
 
   return (
