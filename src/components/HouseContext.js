@@ -17,9 +17,9 @@ const HouseContextProvider = ({ children }) => {
     const allCountries = houses.map((house) => {
       return house.country;
     });
-    console.log(allCountries);
+
     const uniqueCountries = ['Location (any)', ...new Set(allCountries)];
-    console.log(uniqueCountries);
+
     setCountries(uniqueCountries);
   }, []);
 
@@ -27,15 +27,26 @@ const HouseContextProvider = ({ children }) => {
     const allProperties = houses.map((house) => {
       return house.type;
     });
-    console.log(allProperties);
+
     const uniqueProperties = ['Location (any)', ...new Set(allProperties)];
 
     setProperties(uniqueProperties);
   }, []);
 
   const handleClick = () => {
-    console.log('clicked');
+    const isDefault = (str) => {
+      return str.split(' ').includes('(any)');
+    };
+
+    const minPrice = parseInt(price.split(' ')[0]);
+    const maxPrice = parseInt(price.split(' ')[2]);
+
+    const newHouses = housesData.filter((house) => {
+      console.log(parseInt(house.price));
+      return newHouses;
+    });
   };
+
   return (
     <HouseContext.Provider
       value={{
